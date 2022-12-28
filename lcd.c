@@ -3,7 +3,7 @@
 
 /*
   Color Code
-  White jumper:  +3.3 V
+  White jumper:  vbus
   Black jumper:  Ground
   Brown jumper:  PB0  RS
   Red jumper:    PB1  R/W
@@ -17,7 +17,7 @@
 
 
 
-void lcd_string1(char *str)
+void lcd_string1(char *str) // Print on screen with animation
 {
   for (int i=0;str[i]!='\0';i++)
   {
@@ -32,7 +32,7 @@ void lcd_string1(char *str)
   
 }
 
-void lcd_string(char *str)
+void lcd_string(char *str) // Normal String Printing on screen
 {
   for (int i=0;str[i]!='\0';i++)
   {
@@ -40,7 +40,7 @@ void lcd_string(char *str)
   }
   
 }
-void lcd_num(int num)
+void lcd_num(int num) // Prints integer
 {
   char str[10];
   sprintf(str, "%d", num);
@@ -51,13 +51,13 @@ void lcd_num(int num)
   }
 }
 
-void lcd_float(float num)
+void lcd_float(float num) // Prints floating point numbers with precision of 3
 {
    int len = snprintf('\0', 0, "%f", num);
     char flt[10];
   sprintf(flt,"%f", num);
   
-for (int  i=0;i<len-3;i++)  {
+for (int  i=0;i<len-3;i++)  { // solves the 0 after decimal point as precision = 3
   if (flt[i]=='.' & flt[i+1]=='0' & flt[i+2] == '0' & flt[i+3] =='0')
     break;
     lcd_write_nibble(flt[i]);
@@ -70,17 +70,17 @@ for (int  i=0;i<len-3;i++)  {
 
 }
 
-void lcd_write_nibble(unsigned char data)
+void lcd_write_nibble(unsigned char data) // sends character to be printed
 {
 
-  printdata(data);
-  GPIO_PORTB_DATA_R &= (~(1<<1)); //turn off R/W
-  GPIO_PORTB_DATA_R |= (1<<0);   // turn on RS
-  GPIO_PORTB_DATA_R |= (1<<2);
+  printdata(data); //  4 digits due to 4 bit mode
+  GPIO_PORTB_DATA_R &= (~(1<<1)); // turn off R/W    R/W=0
+  GPIO_PORTB_DATA_R |= (1<<0);   // turn on RS   Register select=1
+  GPIO_PORTB_DATA_R |= (1<<2); // Enable Writing Enable =1
   delay(2);
-  GPIO_PORTB_DATA_R &= (~(1<<2));
+  GPIO_PORTB_DATA_R &= (~(1<<2)); // Disable Writing Enable =0
   
-  printdata(data<<4);
+  printdata(data<<4);  // Repeat for other 4 digits
   GPIO_PORTB_DATA_R &= (~(1<<1));
   GPIO_PORTB_DATA_R |= (1<<0);
   GPIO_PORTB_DATA_R |= (1<<2);
@@ -88,16 +88,16 @@ void lcd_write_nibble(unsigned char data)
   GPIO_PORTB_DATA_R &= (~(1<<2));
 }
 
-void lcd_write_cmd(unsigned char command)
+void lcd_write_cmd(unsigned char command) // sends commands that control lcd not printed
 {
-  printdata(command);
-  GPIO_PORTB_DATA_R &= (~(1<<1));
-  GPIO_PORTB_DATA_R &= (~(1<<0));
-  GPIO_PORTB_DATA_R |= (1<<2);
+  printdata(command); //  4 digits due to 4 bit mode
+  GPIO_PORTB_DATA_R &= (~(1<<1)); // turn off R/W    R/W=0
+  GPIO_PORTB_DATA_R &= (~(1<<0)); // turn off RS   Register select=0
+  GPIO_PORTB_DATA_R |= (1<<2); // Enable Writing Enable =1
   delay(2);
-  GPIO_PORTB_DATA_R &= (~(1<<2));
+  GPIO_PORTB_DATA_R &= (~(1<<2)); // Disable Writing Enable =0
 
-  printdata(command<<4);
+  printdata(command<<4); // Repeat for other 4 digits
   GPIO_PORTB_DATA_R &= (~(1<<1));
   GPIO_PORTB_DATA_R &= (~(1<<0));
   GPIO_PORTB_DATA_R |= (1<<2);
@@ -107,7 +107,7 @@ void lcd_write_cmd(unsigned char command)
 
 void printdata(unsigned char data)
 {
-  if((data&0x10)==0x10)
+  if((data&0x10)==0x10) // check if to signal send on d4
   {
   GPIO_PORTB_DATA_R |=(1<<4);
   }
@@ -115,7 +115,7 @@ void printdata(unsigned char data)
   {
   GPIO_PORTB_DATA_R &=~(1<<4);
   }
-  if((data&0x20)==0x20)
+  if((data&0x20)==0x20) // check if to send signal on d5
   {
   GPIO_PORTB_DATA_R |=(1<<5);
   }
@@ -123,7 +123,7 @@ void printdata(unsigned char data)
   {
   GPIO_PORTB_DATA_R &=~(1<<5);
   }  
-  if((data&0x40)==0x40)
+  if((data&0x40)==0x40) // check if to send signal on d6
   {
   GPIO_PORTB_DATA_R |= (1<<6);
   }
@@ -131,7 +131,7 @@ void printdata(unsigned char data)
   {
   GPIO_PORTB_DATA_R &=~(1<<6);
   }  
-  if((data&0x80)==0x80)
+  if((data&0x80)==0x80) // check if to send signal on d7
   {
   GPIO_PORTB_DATA_R |=(1<<7);
   }
