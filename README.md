@@ -263,7 +263,7 @@
 - At anypoint during the execution, the user can press any key on the keypad other than 'D' and '#' to exit the mode.
 - The following Flowchart highlights how the stopwatch works:
 
-![Stopwatch](stopwatchflowchart.png)
+![Stopwatch](Stopwatchflowchart.png)
 
 
 
