@@ -48,6 +48,9 @@ int i =0;
         lcd_write_cmd(0x01);
         lcd_string("ANS");
         first_time = false;
+              lcd_write_nibble(char_read1);
+      op = char_read1;
+      break;
       }
       else // storing the operator
       {
