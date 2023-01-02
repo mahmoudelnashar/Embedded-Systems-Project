@@ -180,7 +180,8 @@
 |:------------:|:-----------------------------:|:--------------------------:|  
 ||1|PA5 on the tiva|  
 ||2|PA6 on the tiva|
-||3|PA7 on the tiva||  
+||3|PA7 on the tiva|
+
 ![pushbuttons](pushbutton.jpg)
 
 
