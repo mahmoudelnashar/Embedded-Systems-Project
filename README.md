@@ -25,12 +25,7 @@
   - [1. Calculator Mode](#1-calculator-mode)
   - [2. Timer Mode](#2-timer-mode)
   - [3. Stopwatch Mode](#3-stopwatch-mode)
-- [Appendix](#appendix)
-  - [Main](#main)
-  - [Modes](#modes)
-  - [Calculator](#calculator)
-  - [Timer](#timer)
-  - [Stopwatch](#stopwatch)
+
 
 
 <div class="page"/>
